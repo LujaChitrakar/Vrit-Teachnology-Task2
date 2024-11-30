@@ -2,8 +2,11 @@ import "./App.css";
 import Navbar from "./components/common/Navbar";
 import KanbanBoard from "./components/KanbanBoard";
 import backgroundImage from "./assets/mountain.jpg";
+import { useState } from "react";
 
 function App() {
+  const [searchQuery, setSearchQuery] = useState("");
+
   return (
     <>
       <div
@@ -15,7 +18,10 @@ function App() {
         }}
       >
         <Navbar />
-        <KanbanBoard />
+        <KanbanBoard
+          searchQuery={searchQuery}
+          setSearchQuery={setSearchQuery}
+        />
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, Dispatch, SetStateAction } from "react";
 import {
   DragDropContext,
   Droppable,
@@ -15,10 +15,19 @@ import {
   faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 
-const KanbanBoard = () => {
+interface KanbanBoardProps {
+  searchQuery: string;
+  setSearchQuery: Dispatch<SetStateAction<string>>;
+}
+
+const KanbanBoard: React.FC<KanbanBoardProps> = ({
+  searchQuery,
+  setSearchQuery,
+}) => {
   const storedColumns = localStorage.getItem("kanbanBoard");
   const [undoStack, setUndoStack] = useState<any[]>([]);
   const [redoStack, setRedoStack] = useState<any[]>([]);
+
   const initialColumns = storedColumns
     ? JSON.parse(storedColumns)
     : {
@@ -58,41 +67,11 @@ const KanbanBoard = () => {
   const [isAddingColumn, setIsAddingColumn] = useState<boolean>(false);
   const [newTaskTitle, setNewTaskTitle] = useState<string>("");
   const [activeColumnId, setActiveColumnId] = useState<string | null>(null);
+  const [selectedColumn, setSelectedColumn] = useState<string>("");
 
   useEffect(() => {
     localStorage.setItem("kanbanBoard", JSON.stringify(columns));
   }, [columns]);
-
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLDivElement>,
-    columnId: string,
-    index: number
-  ) => {
-    if (event.key === "ArrowUp" && index > 0) {
-      // Move task up within the same column
-      const newColumns = { ...columns };
-      const column = newColumns[columnId];
-      const tasks = [...column.cards];
-      const [removed] = tasks.splice(index, 1);
-      tasks.splice(index - 1, 0, removed);
-      newColumns[columnId] = { ...column, cards: tasks };
-      setColumns(newColumns);
-    }
-
-    if (
-      event.key === "ArrowDown" &&
-      index < columns[columnId].cards.length - 1
-    ) {
-      // Move task down within the same column
-      const newColumns = { ...columns };
-      const column = newColumns[columnId];
-      const tasks = [...column.cards];
-      const [removed] = tasks.splice(index, 1);
-      tasks.splice(index + 1, 0, removed);
-      newColumns[columnId] = { ...column, cards: tasks };
-      setColumns(newColumns);
-    }
-  };
 
   const updateColumns = (newColumns: typeof columns) => {
     setUndoStack((prev) => [...prev, columns]); // Save current state for undo
@@ -191,6 +170,12 @@ const KanbanBoard = () => {
     const updatedColumns = { ...columns };
     updatedColumns[columnId].cards.push(newTask);
 
+    const deleteColumn = (columnId: string) => {
+      const newColumns = { ...columns }; // Create a copy of the current state
+      delete newColumns[columnId]; // Remove the column
+      updateColumns(newColumns); // Pass the updated object
+    };
+
     updateColumns(updatedColumns);
     setNewTaskTitle(""); // Clear task input
     setActiveColumnId(null); // Close the input field after adding task
@@ -201,136 +186,192 @@ const KanbanBoard = () => {
     setActiveColumnId((prevId) => (prevId === columnId ? null : columnId));
   };
 
+  const handleColumnFilter = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedColumn(e.target.value);
+  };
+
   return (
     <div>
-      <div className="flex space-x-2 pt-2 pr-6 justify-end">
-        <button
-          onClick={undo}
-          disabled={undoStack.length === 0}
-          className="bg-gray-300 flex items-center gap-1 text-gray-700 px-4 py-2 rounded-lg disabled:opacity-50"
+      {/* search and filter */}
+      <div className="flex justify-between items-center mb-4 px-6 pt-5">
+        <input
+          type="text"
+          placeholder="Search tasks..."
+          value={searchQuery}
+          onChange={(e) => setSearchQuery(e.target.value)}
+          className="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+        <select
+          value={selectedColumn}
+          onChange={handleColumnFilter}
+          className="ml-4 w-1/6 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
         >
-          <span>Undo</span>
-          <FontAwesomeIcon icon={faArrowRotateLeft} />
-        </button>
-        <button
-          onClick={redo}
-          disabled={redoStack.length === 0}
-          className="bg-gray-300 flex items-center gap-1 text-black px-4 py-2 rounded-lg disabled:opacity-50"
-        >
-          <span>Redo</span>
-          <FontAwesomeIcon icon={faArrowRotateRight} />
-        </button>
+          <option value="">All Columns</option>
+          {Object.keys(columns).map((columnId) => (
+            <option key={columnId} value={columnId}>
+              {columns[columnId].title}
+            </option>
+          ))}
+        </select>
       </div>
 
-      <DragDropContext onDragEnd={onDragEnd}>
-        <div className="flex space-x-4 p-6">
-          {Object.entries(columns).map(([id, column]) => (
-            <Droppable key={id} droppableId={id}>
-              {(provided) => (
-                <div
-                  ref={provided.innerRef}
-                  {...provided.droppableProps}
-                  tabIndex={0}
-                  className="w-1/3 bg-gray-100 p-4 rounded-lg transition-transform duration-200 ease-in-out min-h-[200px]"
+      {/* undo and re do */}
+      <div className="flex space-x-2 pt-2 pr-6 justify-end">
+        <div className="flex gap-5 py-2">
+          <button
+            onClick={undo}
+            disabled={undoStack.length === 0}
+            className="bg-[#000000bd] flex items-center gap-1 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+          >
+            <span>Undo</span>
+            <FontAwesomeIcon icon={faArrowRotateLeft} />
+          </button>
+          <button
+            onClick={redo}
+            disabled={redoStack.length === 0}
+            className="bg-[#000000bd] flex items-center gap-1 text-white px-4 py-2 rounded-lg disabled:opacity-50"
+          >
+            <span>Redo</span>
+            <FontAwesomeIcon icon={faArrowRotateRight} />
+          </button>
+        </div>
+      </div>
+      {/* kanban columns */}
+      <div className="">
+        <DragDropContext onDragEnd={onDragEnd}>
+          <div className="flex space-x-4 overflow-x-auto p-4">
+            {Object.keys(columns)
+              .filter(
+                (columnId) => !selectedColumn || columnId === selectedColumn
+              )
+              .map((columnId) => (
+                <Droppable
+                  droppableId={columnId}
+                  key={columnId}
+                  direction="vertical"
                 >
-                  <div className="flex justify-between mb-2 px-4">
-                    <h2 className="font-semibold text-lg">{column.title}</h2>
-                    <button
-                      onClick={() => deleteColumn(id)}
-                      className="text-red-500"
+                  {(provided) => (
+                    <div
+                      className="flex-shrink-0 w-80 bg-white rounded-lg shadow-lg transition-all duration-300"
+                      ref={provided.innerRef}
+                      {...provided.droppableProps}
                     >
-                      <FontAwesomeIcon icon={faTrash} />
-                    </button>
-                  </div>
-                  <div className="flex-1">
-                    {column.cards.map((card, index) => (
-                      <Draggable
-                        key={card.id}
-                        draggableId={card.id}
-                        index={index}
-                      >
-                        {(provided) => (
-                          <div
-                            ref={provided.innerRef}
-                            {...provided.draggableProps}
-                            {...provided.dragHandleProps}
-                            className="bg-white p-4 mb-2 rounded-lg shadow-md"
+                      <div className="p-4">
+                        {/* column header  */}
+                        <div className="flex justify-between mb-2 px-2">
+                          <h2 className="font-semibold text-lg">
+                            {columns[columnId].title}
+                          </h2>
+                          <button
+                            onClick={() => deleteColumn(columnId)}
+                            className="text-red-500"
                           >
-                            <div className="flex justify-between items-center">
-                              <span>{card.title}</span>
-                              <button
-                                onClick={() => deleteTask(id, card.id)}
-                                className="text-red-500"
+                            <FontAwesomeIcon icon={faTrash} />
+                          </button>
+                        </div>
+                        {/* column cards */}
+                        <div>
+                          {columns[columnId].cards
+                            .filter((task) =>
+                              task.title
+                                .toLowerCase()
+                                .includes(searchQuery.toLowerCase())
+                            )
+                            .map((task, index) => (
+                              <Draggable
+                                draggableId={task.id}
+                                index={index}
+                                key={task.id}
                               >
-                                <FontAwesomeIcon icon={faTrash} />
-                              </button>
-                            </div>
+                                {(provided) => (
+                                  <div
+                                    ref={provided.innerRef}
+                                    {...provided.draggableProps}
+                                    {...provided.dragHandleProps}
+                                    className="bg-gray-200 mb-2 p-2 rounded-lg shadow-sm"
+                                  >
+                                    <div className="flex justify-between">
+                                      <span>{task.title}</span>
+                                      <button
+                                        onClick={() =>
+                                          deleteTask(columnId, task.id)
+                                        }
+                                        className="text-red-600"
+                                      >
+                                        <FontAwesomeIcon icon={faTrash} />
+                                      </button>
+                                    </div>
+                                  </div>
+                                )}
+                              </Draggable>
+                            ))}
+                        </div>
+                        {/* add a new task */}
+                        {activeColumnId === columnId && (
+                          <div className="flex gap-2 items-center">
+                            <input
+                              type="text"
+                              className="w-full px-2 py-2  border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                              value={newTaskTitle}
+                              onChange={(e) => setNewTaskTitle(e.target.value)}
+                              placeholder="Add a new task"
+                            />
+                            <button
+                              onClick={() => handleAddTask(columnId)}
+                              className="bg-blue-600 text-white h-[35px] text-[14px] w-[100px] rounded-lg"
+                            >
+                              Add Task
+                            </button>
                           </div>
                         )}
-                      </Draggable>
-                    ))}
-                  </div>
-                  {provided.placeholder}
-                  <div className="flex mt-auto justify-center items-center flex-col">
-                    {activeColumnId === id && (
-                      <div className="mb-2">
-                        <input
-                          value={newTaskTitle}
-                          onChange={(e) => setNewTaskTitle(e.target.value)}
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter") handleAddTask(id);
-                          }}
-                          className="w-full p-2 border rounded"
-                          placeholder="Add a task..."
-                        />
+                        <button
+                          onClick={() => toggleTaskInput(columnId)}
+                          className="mt-2 text-blue-500"
+                        >
+                          {activeColumnId === columnId ? "Cancel" : "Add Task"}
+                        </button>
                       </div>
-                    )}
+                    </div>
+                  )}
+                </Droppable>
+              ))}
+            <div className="flex-shrink-0 w-80">
+              {isAddingColumn ? (
+                <div>
+                  <input
+                    type="text"
+                    placeholder="New column title"
+                    value={newColumnTitle}
+                    onChange={(e) => setNewColumnTitle(e.target.value)}
+                    className="w-full px-2 py-1 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                  />
+                  <div className="mt-2 flex justify-between px-2">
                     <button
-                      onClick={() => toggleTaskInput(id)}
-                      className=" text-white w-[100px] rounded-md p-1 text-sm bg-blue-600"
+                      onClick={handleAddColumn}
+                      className="bg-blue-600 text-white px-4 py-1 rounded-lg"
                     >
-                      {activeColumnId === id ? "Cancel" : "Add Task"}
+                      Add Column
+                    </button>
+                    <button
+                      onClick={() => setIsAddingColumn(false)}
+                      className="text-white bg-red-600 px-4 py-1 rounded-lg"
+                    >
+                      Cancel
                     </button>
                   </div>
                 </div>
+              ) : (
+                <button
+                  onClick={() => setIsAddingColumn(true)}
+                  className="w-full bg-gray-300 text-black px-4 py-2 rounded-lg"
+                >
+                  <FontAwesomeIcon icon={faPlus} /> Add Column
+                </button>
               )}
-            </Droppable>
-          ))}{" "}
-          <div
-            className="gap-2 flex justify-center font-semibold items-center text-[16px] w-[300px] bg-gray-100 p-4 rounded-lg transition-transform duration-200 ease-in-out h-[60px] cursor-pointer"
-            onClick={() => setIsAddingColumn(true)}
-          >
-            <FontAwesomeIcon icon={faPlus} /> <span>Add a list</span>
-          </div>
-        </div>
-        {isAddingColumn && (
-          <div className="fixed inset-0 flex items-center justify-center bg-gray-700 bg-opacity-50">
-            <div className="bg-white p-6 rounded-lg">
-              <input
-                type="text"
-                value={newColumnTitle}
-                onChange={(e) => setNewColumnTitle(e.target.value)}
-                placeholder="Enter column title"
-                className="border p-2 w-full mb-4"
-              />
-              <div className="flex space-x-2">
-                <button
-                  onClick={handleAddColumn}
-                  className="bg-blue-500 text-white px-4 py-2 rounded-lg"
-                >
-                  Add Column
-                </button>
-                <button
-                  onClick={() => setIsAddingColumn(false)}
-                  className="bg-gray-300 text-gray-700 px-4 py-2 rounded-lg"
-                >
-                  Cancel
-                </button>
-              </div>
             </div>
           </div>
-        )}
-      </DragDropContext>
+        </DragDropContext>
+      </div>
     </div>
   );
 };
