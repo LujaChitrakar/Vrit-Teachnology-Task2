@@ -5,6 +5,9 @@
     { "path": "./tsconfig.node.json" }
   ],
   "compilerOptions": {
-    "strict": true
+    "strict": true,
+    "jsx": "react-jsx", // Enable JSX support
+    "esModuleInterop": true,
+    "types": ["jest", "node"]
   }
 }

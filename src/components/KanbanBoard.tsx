@@ -128,9 +128,9 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   };
 
   const deleteColumn = (columnId: string) => {
-    const newColumns = { ...columns }; // Create a copy of the current state
-    delete newColumns[columnId]; // Remove the column
-    updateColumns(newColumns); // Pass the updated object
+    const newColumns = { ...columns };
+    delete newColumns[columnId];
+    updateColumns(newColumns);
   };
 
   const deleteTask = (columnId: string, taskId: string) => {
@@ -169,12 +169,6 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
     const updatedColumns = { ...columns };
     updatedColumns[columnId].cards.push(newTask);
-
-    const deleteColumn = (columnId: string) => {
-      const newColumns = { ...columns }; // Create a copy of the current state
-      delete newColumns[columnId]; // Remove the column
-      updateColumns(newColumns); // Pass the updated object
-    };
 
     updateColumns(updatedColumns);
     setNewTaskTitle(""); // Clear task input
@@ -331,6 +325,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
                           {activeColumnId === columnId ? "Cancel" : "Add Task"}
                         </button>
                       </div>
+                      {provided.placeholder}
                     </div>
                   )}
                 </Droppable>
