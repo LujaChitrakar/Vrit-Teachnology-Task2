@@ -1,50 +1,161 @@
-# React + TypeScript + Vite
+# Drag-and-Drop Kanban Board
+==========================
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, designed to manage tasks effectively with smooth drag-and-drop functionality, customizable columns, and advanced features like search, filtering, and undo/redo.
 
-Currently, two official plugins are available:
+* * * * *
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+🚀 Live Demo
+------------
 
-## Expanding the ESLint configuration
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
 
-- Configure the top-level `parserOptions` property like this:
+* * * * *
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+✨ Features
+----------
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+### Core Features
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+1.  **Drag-and-Drop Functionality**: Move tasks seamlessly between columns using `@hello-pangea/dnd`.
+2.  **Local Storage Persistence**: Save and load board state automatically.
+3.  **Keyboard Accessibility**: Navigate and manage tasks using keyboard shortcuts.
+4.  **Search and Filtering**: Search tasks dynamically and filter by columns or metadata.
+5.  **Undo/Redo Functionality**: Effortlessly revert or reapply changes.
+6.  **Delete Functionality**: Delete list/column or task/cards easily.
+7.  **Add Functionality**: Add list/column or task/cards easily.
+8.  **Testing**: Testing is performed by using jest and react-testing-library.
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+### Bonus Features
+
+-   Column creation and deletion.
+-   Smooth animations for task movement.
+
+* * * * *
+
+📐 Technology Choices and Rationale
+-----------------------------------
+
+### Core Technologies
+
+1.  **React**: Chosen for its component-based architecture, enabling clean separation of concerns.
+2.  **TypeScript**: Provides strong typing for better maintainability and fewer runtime errors.
+3.  **Tailwind CSS**: Speeds up styling with utility-first CSS classes.
+4.  **@hello-pangea/dnd**: Simplifies drag-and-drop functionality with accessibility considerations.
+
+### Why These Choices?
+
+-   Ensures scalability and robustness.
+-   Focuses on performance and developer productivity.
+-   Aligns with modern best practices.
+
+* * * * *
+
+🛠️ Setup Instructions
+----------------------
+
+1.  **Clone the Repository**:
+
+    bash
+
+    Copy code
+
+    `git clone https://github.com/your-username/kanban-board.git
+    cd kanban-board`
+
+2.  **Install Dependencies**:
+
+    bash
+
+    Copy code
+
+    `npm install`
+
+3.  **Run the Project**:
+
+    bash
+
+    Copy code
+
+    `npm run dev`
+
+4.  **Run Tests**:
+
+    bash
+
+    Copy code
+
+    `npm test`
+
+5.  **Build for Production**:
+
+    bash
+
+    Copy code
+
+    `npm run build`
+
+6.  **Serve the Build Locally**:
+
+    bash
+
+    Copy code
+
+    `npm run serve`
+
+* * * * *
+
+🧪 Known Limitations and Trade-Offs
+-----------------------------------
+
+-   **Undo/Redo Scope**: Limited to task movements and column modifications.
+-   **Local Storage**: State persistence is limited to the current browser.
+-   **Responsiveness**: Currently not responsive.
+
+* * * * *
+
+🚀 Future Improvements
+----------------------
+
+-   Implement real-time updates with a backend.
+-   Add user authentication for personalized boards.
+-   Allow task dependencies and sub-tasks.
+-   Support export/import of board state.
+-   Add dark mode for better accessibility.
+
+* * * * *
+
+📊 Evaluation Criteria
+----------------------
+
+### 1\. Code Organization and Architecture
+
+-   Components are modular and reusable.
+-   Hooks and utilities are segregated for better maintainability.
+
+### 2\. TypeScript/JavaScript Best Practices
+
+-   Strict mode enabled for TypeScript.
+-   All variables and functions are properly typed.
+
+
+### 3\. Test Coverage and Quality
+
+-   Comprehensive tests for drag-and-drop, undo/redo, search, and filtering.
+
+### 5\. Documentation Quality
+
+-   Clear and comprehensive README with setup instructions, feature descriptions, and technology rationale.
+
+* * * * *
+
+🕒 Time Spent
+-------------
+
+-   **Planning and Setup**: ~1 hour
+-   **Core Features Development**: ~4 hours
+-   **Bonus Features and Enhancements**: ~1 hours
+-   **Testing and Bug Fixes**: ~1 hours
+-   **Documentation and Deployment**: ~1 hours
+
+**Total**: ~8 hours
