@@ -7,7 +7,7 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
 🚀 Live Demo
 ------------
-[LINK FOR THE PROJECT](https://drive.google.com/file/d/1jSYGj7i-tR2jY1wQ9rt5G_CT4o4k9qlm/view?usp=drive_link)
+
 
 
 * * * * *
@@ -58,12 +58,16 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
-    `https://github.com/LujaChitrakar/Vrit-Teachnology-Task2.git
-    cd Vrit-Teachnology-Task2`
+    Copy code
+
+    `git clone https://github.com/your-username/kanban-board.git
+    cd kanban-board`
 
 2.  **Install Dependencies**:
 
     bash
+
+    Copy code
 
     `npm install`
 
@@ -71,6 +75,7 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
+    Copy code
 
     `npm run dev`
 
@@ -78,17 +83,23 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
+    Copy code
+
     `npm test`
 
 5.  **Build for Production**:
 
     bash
 
+    Copy code
+
     `npm run build`
 
 6.  **Serve the Build Locally**:
 
     bash
+
+    Copy code
 
     `npm run serve`
 
