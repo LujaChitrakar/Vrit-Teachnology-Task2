@@ -3,3 +3,11 @@ body {
   font-weight: 400;
   font-style: normal;
 }
+
+.task-enter {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
+
+.task-exit {
+  transition: transform 0.2s ease, opacity 0.2s ease;
+}
