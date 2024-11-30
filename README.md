@@ -58,8 +58,6 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
-    Copy code
-
     `git clone https://github.com/your-username/kanban-board.git
     cd kanban-board`
 
@@ -67,15 +65,12 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
-    Copy code
-
     `npm install`
 
 3.  **Run the Project**:
 
     bash
 
-    Copy code
 
     `npm run dev`
 
@@ -83,23 +78,17 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
-    Copy code
-
     `npm test`
 
 5.  **Build for Production**:
 
     bash
 
-    Copy code
-
     `npm run build`
 
 6.  **Serve the Build Locally**:
 
     bash
-
-    Copy code
 
     `npm run serve`
 
