@@ -143,8 +143,8 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
 -   **Planning and Setup**: ~1 hour
 -   **Core Features Development**: ~4 hours
--   **Bonus Features and Enhancements**: ~1 hours
+-   **Bonus Features and Enhancements**: ~2 hours
 -   **Testing and Bug Fixes**: ~1 hours
 -   **Documentation and Deployment**: ~1 hours
 
-**Total**: ~8 hours
+**Total**: ~9 hours
