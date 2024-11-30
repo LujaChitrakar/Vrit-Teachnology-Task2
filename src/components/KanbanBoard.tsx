@@ -76,7 +76,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   const updateColumns = (newColumns: typeof columns) => {
     setUndoStack((prev) => [...prev, columns]); // Save current state for undo
     setColumns(newColumns); // Update columns
-    setRedoStack([]); // Clear redo stack on new change
+    setRedoStack([]);
   };
 
   const onDragEnd = (result: DropResult) => {
@@ -142,7 +142,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   };
 
   const undo = () => {
-    if (undoStack.length === 0) return; // Nothing to undo
+    if (undoStack.length === 0) return;
 
     const lastState = undoStack[undoStack.length - 1];
     setRedoStack((prev) => [...prev, columns]); // Save current state for redo
@@ -151,7 +151,7 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
   };
 
   const redo = () => {
-    if (redoStack.length === 0) return; // Nothing to redo
+    if (redoStack.length === 0) return;
 
     const nextState = redoStack[redoStack.length - 1];
     setUndoStack((prev) => [...prev, columns]); // Save current state for undo
@@ -172,11 +172,10 @@ const KanbanBoard: React.FC<KanbanBoardProps> = ({
 
     updateColumns(updatedColumns);
     setNewTaskTitle(""); // Clear task input
-    setActiveColumnId(null); // Close the input field after adding task
+    setActiveColumnId(null);
   };
 
   const toggleTaskInput = (columnId: string) => {
-    // Toggle task input visibility in the specific column
     setActiveColumnId((prevId) => (prevId === columnId ? null : columnId));
   };
 
