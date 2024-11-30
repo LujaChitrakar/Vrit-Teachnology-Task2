@@ -5,9 +5,15 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
 * * * * *
 
-🚀 Live Demo
+ Live Video Demo
 ------------
 [LINK FOR THE PROJECT](https://drive.google.com/file/d/1jSYGj7i-tR2jY1wQ9rt5G_CT4o4k9qlm/view?usp=drive_link)
+
+
+* * * * *
+ Live Website  Demo
+------------
+[LINK FOR THE PROJECT](https://vrit-teachnology-task2-lujachitrakar.vercel.app/)
 
 
 * * * * *
