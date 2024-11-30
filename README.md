@@ -58,8 +58,8 @@ A feature-rich Kanban board built with React, TypeScript, and Tailwind CSS, desi
 
     bash
 
-    `git clone https://github.com/your-username/kanban-board.git
-    cd kanban-board`
+    `https://github.com/LujaChitrakar/Vrit-Teachnology-Task2.git
+    cd Vrit-Teachnology-Task2`
 
 2.  **Install Dependencies**:
 
